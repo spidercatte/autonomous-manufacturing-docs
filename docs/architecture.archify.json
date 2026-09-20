@@ -1,0 +1,275 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Unified Heatwave Root-Cause Architecture",
+    "output": "architecture.html",
+    "quality_profile": "showcase",
+    "animation": "trace",
+    "viewBox": [1380, 760],
+    "views": [
+      {
+        "id": "diagnostic-path",
+        "label": "Diagnostic path",
+        "focus": ["dashboard", "workflow", "agents", "ontology", "twin"],
+        "note": "Follow the operator-triggered diagnosis from the dashboard through evidence-backed reasoning and simulation."
+      },
+      {
+        "id": "semantic-context",
+        "label": "Semantic context",
+        "focus": ["duckdb", "repository", "faiss", "retriever", "contracts", "ontology"],
+        "note": "DuckDB, FAISS, and contracts remain authoritative while the ontology provides a shared read-only view."
+      },
+      {
+        "id": "safe-execution",
+        "label": "Safe execution",
+        "focus": ["operator", "dashboard", "workflow", "execution", "twin"],
+        "note": "Only Workflow accepts operator commands; guarded execution changes the digital twin, never real equipment."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "duckdb",
+      "type": "database",
+      "label": "DuckDB",
+      "sublabel": "structured + case state",
+      "tag": "IMPLEMENTED",
+      "pos": [40, 100],
+      "size": [160, 62]
+    },
+    {
+      "id": "repository",
+      "type": "backend",
+      "label": "AnalyticsRepository",
+      "sublabel": "parameterised access",
+      "tag": "IMPLEMENTED",
+      "pos": [260, 100],
+      "size": [180, 62]
+    },
+    {
+      "id": "contracts",
+      "type": "backend",
+      "label": "Canonical Contracts",
+      "sublabel": "cases, evidence, work",
+      "tag": "IMPLEMENTED",
+      "pos": [600, 35],
+      "size": [180, 62]
+    },
+    {
+      "id": "ontology",
+      "type": "backend",
+      "label": "Ontology Layer",
+      "sublabel": "read-only semantic facade",
+      "tag": "O1-O2 DONE",
+      "pos": [600, 180],
+      "size": [180, 70]
+    },
+    {
+      "id": "retriever",
+      "type": "backend",
+      "label": "KnowledgeRetriever",
+      "sublabel": "filter, rerank, citations",
+      "tag": "I3 IN PROGRESS",
+      "pos": [960, 100],
+      "size": [180, 62]
+    },
+    {
+      "id": "faiss",
+      "type": "database",
+      "label": "FAISS",
+      "sublabel": "approved document index",
+      "tag": "I3 IN PROGRESS",
+      "pos": [1180, 100],
+      "size": [160, 62]
+    },
+    {
+      "id": "operator",
+      "type": "external",
+      "label": "Named Operator",
+      "sublabel": "reviewer / maintainer",
+      "pos": [40, 515],
+      "size": [160, 62]
+    },
+    {
+      "id": "dashboard",
+      "type": "frontend",
+      "label": "Dashboard + API",
+      "sublabel": "evidence, review, commands",
+      "tag": "EXTEND I6-I7",
+      "pos": [270, 515],
+      "size": [180, 62]
+    },
+    {
+      "id": "workflow",
+      "type": "security",
+      "label": "Workflow",
+      "sublabel": "sole mutation authority",
+      "tag": "EXTEND I6",
+      "pos": [520, 515],
+      "size": [180, 66]
+    },
+    {
+      "id": "agents",
+      "type": "backend",
+      "label": "Five-Agent Pipeline",
+      "sublabel": "fixed diagnostic order",
+      "tag": "PLANNED I4",
+      "pos": [650, 335],
+      "size": [180, 66]
+    },
+    {
+      "id": "execution",
+      "type": "security",
+      "label": "Execution Agent",
+      "sublabel": "rechecks all gates",
+      "tag": "IMPLEMENTED",
+      "pos": [890, 515],
+      "size": [170, 66]
+    },
+    {
+      "id": "twin",
+      "type": "backend",
+      "label": "Digital Twin",
+      "sublabel": "advisory predicted states",
+      "tag": "EXTEND I5",
+      "pos": [1170, 515],
+      "size": [170, 66]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Read-only context and evidence plane",
+      "wraps": ["duckdb", "repository", "contracts", "ontology", "retriever", "faiss"],
+      "pad": 34
+    },
+    {
+      "kind": "security-group",
+      "label": "Human-controlled simulated operations",
+      "wraps": ["dashboard", "workflow", "agents", "execution", "twin"],
+      "pad": 34
+    }
+  ],
+  "connections": [
+    {
+      "id": "db_access",
+      "from": "duckdb",
+      "to": "repository"
+    },
+    {
+      "id": "structured_projection",
+      "from": "repository",
+      "to": "ontology"
+    },
+    {
+      "id": "contract_projection",
+      "from": "contracts",
+      "to": "ontology"
+    },
+    {
+      "id": "retrieval_projection",
+      "from": "retriever",
+      "to": "ontology"
+    },
+    {
+      "id": "vector_search",
+      "from": "faiss",
+      "to": "retriever"
+    },
+    {
+      "id": "operator_request",
+      "from": "operator",
+      "to": "dashboard",
+      "label": "named action",
+      "variant": "emphasis",
+      "labelDy": 44
+    },
+    {
+      "id": "validated_command",
+      "from": "dashboard",
+      "to": "workflow",
+      "label": "validated command",
+      "variant": "security",
+      "labelDy": -42
+    },
+    {
+      "id": "run_pipeline",
+      "from": "workflow",
+      "to": "agents",
+      "variant": "emphasis",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "agent_context",
+      "from": "ontology",
+      "to": "agents",
+      "label": "bounded context",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [690, 292]
+    },
+    {
+      "id": "guarded_execution",
+      "from": "workflow",
+      "to": "execution",
+      "label": "approval + fresh validation",
+      "variant": "security",
+      "labelDy": 46
+    },
+    {
+      "id": "twin_only",
+      "from": "execution",
+      "to": "twin",
+      "label": "simulated only; no PLC",
+      "variant": "security",
+      "labelDy": -42
+    },
+    {
+      "id": "intervention_tests",
+      "from": "agents",
+      "to": "twin",
+      "label": "intervention tests",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "top"
+    },
+    {
+      "id": "read_models",
+      "from": "ontology",
+      "to": "dashboard",
+      "label": "explanations + affordances",
+      "variant": "dashed",
+      "fromSide": "left",
+      "toSide": "top"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Implemented foundation",
+      "items": [
+        "Existing dashboard, Workflow, Execution Agent, and digital twin",
+        "Contracts, fixtures, DuckDB repository, ontology O1-O2, and the RAG core"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Planned integration",
+      "items": [
+        "Finish RAG status/selection and the bounded OntologyService",
+        "Agents: Signal, Asset Context, Knowledge, Root Cause, Work Instruction",
+        "Five-agent diagnosis, twin interventions, workflow/API, and dashboard extensions"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Safety boundary",
+      "items": [
+        "Ontology affordances are advisory; Workflow rechecks authoritative guards",
+        "No PLC, device, or real-equipment write path exists"
+      ]
+    }
+  ]
+}

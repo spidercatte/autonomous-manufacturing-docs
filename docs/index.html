@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Interactive architecture and governance diagrams for the autonomous manufacturing demo.">
+  <title>Autonomous Manufacturing — Architecture docs</title>
+  <style>
+    :root { color-scheme: dark; --bg: #0b1020; --panel: #151d33; --line: #2c3b5d; --text: #f4f7ff; --muted: #aebbd6; --accent: #70d6b2; --accent-2: #80bfff; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: radial-gradient(circle at 10% 0%, #1c315d 0, transparent 34rem), var(--bg); color: var(--text); font: 16px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    main { width: min(1080px, calc(100% - 2rem)); margin: 0 auto; padding: clamp(3rem, 8vw, 7rem) 0; }
+    .eyebrow { color: var(--accent); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-size: .8rem; }
+    h1 { max-width: 800px; margin: .5rem 0 1rem; font-size: clamp(2.25rem, 6vw, 4.5rem); line-height: 1.05; letter-spacing: -.045em; }
+    .intro { max-width: 700px; color: var(--muted); font-size: clamp(1rem, 2vw, 1.2rem); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 3rem; }
+    article { display: flex; flex-direction: column; min-height: 260px; padding: 1.5rem; background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 16px 45px #0003; }
+    h2 { margin: 0 0 .75rem; font-size: 1.35rem; line-height: 1.2; }
+    p { margin: 0; color: var(--muted); }
+    .links { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: auto; padding-top: 1.5rem; }
+    a { display: inline-flex; align-items: center; min-height: 2.5rem; padding: .45rem .8rem; border: 1px solid #3d5c94; border-radius: 8px; color: var(--text); font-weight: 650; text-decoration: none; }
+    a:hover, a:focus-visible { background: var(--accent-2); border-color: var(--accent-2); color: #07111f; outline: none; }
+    a.secondary { border-color: transparent; color: var(--accent-2); }
+    footer { margin-top: 3rem; color: var(--muted); font-size: .9rem; }
+    code { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="eyebrow">Autonomous Manufacturing</div>
+    <h1>Architecture &amp; governance diagrams</h1>
+    <p class="intro">Interactive visual references for the heatwave root-cause and maintenance-diagnosis work. Open a diagram to explore it; use the SVG or PNG when you need a static asset for a slide.</p>
+
+    <section class="grid" aria-label="Architecture diagrams">
+      <article>
+        <h2>Target architecture</h2>
+        <p>The planned system structure and boundaries around evidence, analytics, diagnosis, and human-approved action.</p>
+        <div class="links">
+          <a href="architecture.html">Open interactive diagram</a>
+          <a class="secondary" href="architecture.svg">SVG</a>
+          <a class="secondary" href="architecture.png">PNG</a>
+        </div>
+      </article>
+
+      <article>
+        <h2>Demo sequence</h2>
+        <p>The planned end-to-end flow from an environmental signal through diagnosis, review, and simulated execution.</p>
+        <div class="links">
+          <a href="demo-sequence.html">Open interactive diagram</a>
+          <a class="secondary" href="demo-sequence.svg">SVG</a>
+          <a class="secondary" href="demo-sequence.png">PNG</a>
+        </div>
+      </article>
+
+      <article>
+        <h2>Evidence &amp; governance</h2>
+        <p>How documents, retrieval evidence, the ontology, and the approval boundary fit together.</p>
+        <div class="links">
+          <a href="ontology-governance.html">Open interactive diagram</a>
+          <a class="secondary" href="ontology-governance.svg">SVG</a>
+        </div>
+      </article>
+    </section>
+
+    <footer>Published as static files — no server-side application or credentials are required.</footer>
+  </main>
+</body>
+</html>

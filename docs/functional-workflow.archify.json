@@ -1,0 +1,107 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Heatwave Root-Cause Functional Workflow",
+    "output": "functional-workflow.html",
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "viewBox": [1260, 760],
+    "views": [
+      {
+        "id": "understand",
+        "label": "Detect and understand",
+        "focus": ["detect", "context", "diagnose"],
+        "note": "Validate the signals, calculate Cpk, assemble asset context, and rank evidence-backed causes."
+      },
+      {
+        "id": "decide",
+        "label": "Simulate and decide",
+        "focus": ["diagnose", "simulate", "validate_work", "review"],
+        "note": "Compare mitigation and repair paths, then block unsafe or incomplete instructions before review."
+      },
+      {
+        "id": "operate",
+        "label": "Approve and learn",
+        "focus": ["review", "execute", "learn", "rollback"],
+        "note": "A named human approves the current version before twin-only execution, monitoring, and outcome learning."
+      }
+    ]
+  },
+  "lanes": [
+    { "id": "intelligence", "label": "Signals + diagnostic agents" },
+    { "id": "decision", "label": "Twin + deterministic validation" },
+    { "id": "governance", "label": "Human governance" },
+    { "id": "operations", "label": "Simulated operations + learning" },
+    { "id": "exceptions", "label": "Blocked / rollback", "variant": "exception" }
+  ],
+  "phases": [
+    { "id": "observe", "label": "Observe + contextualise", "fromCol": 0, "toCol": 1 },
+    { "id": "reason", "label": "Diagnose + test", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
+    { "id": "govern", "label": "Govern + operate", "fromCol": 4, "toCol": 5, "variant": "security" }
+  ],
+  "groups": [
+    { "id": "blocking_validation", "label": "Blocking validation", "lane": "decision", "fromCol": 3, "toCol": 4, "variant": "security" },
+    { "id": "safe_recovery", "label": "Safe stop path", "lane": "exceptions", "fromCol": 4, "toCol": 5, "variant": "security" }
+  ],
+  "mainPath": ["detect", "context", "diagnose", "simulate", "validate_work", "review", "execute", "learn"],
+  "semanticChecks": {
+    "allowedRoots": ["detect"],
+    "allowedTerminals": ["learn", "blocked"],
+    "requiredPaths": [
+      { "from": "detect", "to": "review" },
+      { "from": "review", "to": "execute" },
+      { "from": "execute", "to": "learn" }
+    ]
+  },
+  "nodes": [
+    { "id": "detect", "lane": "intelligence", "col": 0, "type": "messagebus", "label": "Detect + Validate", "sublabel": "heat, alarm, signals, Cpk", "tag": "STEPS 1-2" },
+    { "id": "context", "lane": "intelligence", "col": 1, "type": "backend", "label": "Build Context", "sublabel": "asset + FAISS evidence", "tag": "STEPS 3-4" },
+    { "id": "diagnose", "lane": "intelligence", "col": 2, "type": "backend", "label": "Rank Root Causes", "sublabel": "support + contradiction", "tag": "STEP 5" },
+    { "id": "simulate", "lane": "decision", "col": 3, "type": "backend", "label": "Simulate Options", "sublabel": "mitigation vs repair", "tag": "STEP 6" },
+    { "id": "validate_work", "lane": "decision", "col": 4, "type": "security", "label": "Validate Work", "sublabel": "parts, tools, settings, safety", "tag": "STEP 7" },
+    { "id": "review", "lane": "governance", "col": 4, "type": "security", "label": "Acknowledge + Approve", "sublabel": "named human + current version", "tag": "STEPS 8-9" },
+    { "id": "execute", "lane": "operations", "col": 5, "type": "backend", "label": "Execute on Twin", "sublabel": "monitor acceptance criteria", "tag": "STEP 10" },
+    { "id": "learn", "lane": "operations", "col": 5, "type": "database", "label": "Record + Learn", "sublabel": "confirmed outcome + history", "tag": "STEP 11", "yOffset": 110 },
+    { "id": "blocked", "lane": "exceptions", "col": 4, "type": "security", "label": "Block Approval", "sublabel": "repair validation failure" },
+    { "id": "rollback", "lane": "exceptions", "col": 5, "type": "security", "label": "Stop + Roll Back", "sublabel": "acceptance trigger" }
+  ],
+  "edges": [
+    { "from": "detect", "to": "context", "role": "main" },
+    { "from": "context", "to": "diagnose", "role": "main" },
+    { "from": "diagnose", "to": "simulate", "role": "main", "variant": "emphasis" },
+    { "from": "simulate", "to": "validate_work", "role": "main", "variant": "emphasis" },
+    { "from": "validate_work", "to": "review", "role": "main", "variant": "security", "route": "drop", "fromSide": "bottom", "toSide": "top" },
+    { "from": "review", "to": "execute", "label": "approved current version", "role": "main", "variant": "security" },
+    { "from": "execute", "to": "learn", "label": "confirmed outcome", "role": "main" },
+    { "from": "validate_work", "to": "blocked", "label": "required check fails", "role": "error", "variant": "security", "route": "drop", "fromSide": "bottom", "toSide": "top" },
+    { "from": "execute", "to": "rollback", "label": "trigger breached", "role": "error", "variant": "security" },
+    { "from": "rollback", "to": "learn", "label": "record rollback", "role": "return", "variant": "dashed", "route": "return-left", "fromSide": "left", "toSide": "left" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Evidence before action",
+      "items": [
+        "Signal quality, Cpk, asset context, and approved passages precede diagnosis",
+        "Top causes include both supporting and contradictory evidence"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Deterministic gates",
+      "items": [
+        "Parts, inventory, tools, settings, documents, and critical safety steps must validate",
+        "A stale task version or failed required check blocks approval"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Twin-only operation",
+      "items": [
+        "Execution changes only the digital twin",
+        "Monitoring can stop and roll back before the outcome is recorded"
+      ]
+    }
+  ]
+}
