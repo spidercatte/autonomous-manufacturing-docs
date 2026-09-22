@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hackathon Demo Stage</title>
+  <style>
+    :root { color-scheme: dark; --bg: #08111d; --panel: #101d2e; --line: #29405a; --text: #e8f0f7; --muted: #9fb2c4; --accent: #72e0c0; }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; background: var(--bg); color: var(--text); font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; }
+    body { display: grid; grid-template-rows: auto 1fr; overflow: hidden; }
+    header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .75rem 1rem; border-bottom: 1px solid var(--line); background: #0b1726; }
+    h1 { margin: 0; font-size: 1rem; letter-spacing: .02em; }
+    p { margin: 0; color: var(--muted); }
+    .status { color: var(--accent); white-space: nowrap; }
+    main { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); min-height: 0; gap: 1px; background: var(--line); }
+    section { min-width: 0; min-height: 0; background: var(--panel); }
+    iframe { display: block; width: 100%; height: 100%; border: 0; background: var(--bg); }
+    .fallback { display: grid; place-items: center; height: 100%; padding: 2rem; text-align: center; }
+    .fallback p { max-width: 28rem; }
+    @media (max-width: 900px) { body { overflow: auto; } main { grid-template-columns: 1fr; grid-template-rows: 50vh 70vh; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Two-use-case hackathon demo</h1>
+      <p>Workflow context on the left · live dashboard on the right</p>
+    </div>
+    <p class="status">Manual clock enabled</p>
+  </header>
+  <main>
+    <section aria-label="Hackathon workflow">
+      <iframe src="hackathon-demo-sequence.html?embed=1" title="Two-use-case hackathon workflow"></iframe>
+    </section>
+    <section aria-label="Live proactive manufacturing dashboard">
+      <iframe id="dashboard" title="Live proactive manufacturing dashboard"></iframe>
+    </section>
+  </main>
+  <script>
+    const port = new URLSearchParams(window.location.search).get('port') || '8765';
+    document.getElementById('dashboard').src = `http://127.0.0.1:${port}/`;
+  </script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+/* Shared Google Cloud palette for target and local tech-stack comparison diagrams. */
+[data-theme="light"][data-preset] {
+  --bg: #f8f9fa;
+  --grid: #e8eef7;
+  --panel: #ffffff;
+  --panel-border: #dadce0;
+  --lane-fill: #e8f0fe;
+  --lane-stroke: #8ab4f8;
+  --text: #202124;
+  --text-muted: #5f6368;
+  --text-dim: #80868b;
+  --text-faint: #5f6368;
+  --mask: #ffffff;
+  --frontend-fill: #e8f0fe;
+  --frontend-stroke: #1a73e8;
+  --backend-fill: #edf3ff;
+  --backend-stroke: #4285f4;
+  --database-fill: #e8f0fe;
+  --database-stroke: #5e97f6;
+  --cloud-fill: #edf3ff;
+  --cloud-stroke: #4285f4;
+  --security-fill: #e6f4ea;
+  --security-stroke: #34a853;
+  --messagebus-fill: #e8f0fe;
+  --messagebus-stroke: #4285f4;
+  --external-fill: #ffffff;
+  --external-stroke: #9aa0a6;
+  --arrow: #4285f4;
+  --arrow-emphasis: #34a853;
+  --toolbar-bg: #ffffff;
+  --toolbar-border: #dadce0;
+  --toolbar-text: #202124;
+  --toolbar-hover: #e8f0fe;
+  --toolbar-menu-bg: #ffffff;
+  --gcp-region-fill: rgba(232, 240, 254, 0.72);
+  --gcp-region-stroke: #8ab4f8;
+  --gcp-outer-fill: rgba(248, 249, 250, 0.35);
+  --gcp-outer-stroke: #9aa0a6;
+}
+
+[data-theme="dark"][data-preset] {
+  --bg: #101827;
+  --grid: #273b58;
+  --panel: #17243a;
+  --panel-border: #3b526f;
+  --lane-fill: #18345d;
+  --lane-stroke: #8ab4f8;
+  --text: #f1f3f4;
+  --text-muted: #bdc1c6;
+  --text-dim: #9aa0a6;
+  --text-faint: #bdc1c6;
+  --mask: #17243a;
+  --frontend-fill: #193a6a;
+  --frontend-stroke: #8ab4f8;
+  --backend-fill: #193a6a;
+  --backend-stroke: #8ab4f8;
+  --database-fill: #193a6a;
+  --database-stroke: #8ab4f8;
+  --cloud-fill: #193a6a;
+  --cloud-stroke: #8ab4f8;
+  --security-fill: #173d2b;
+  --security-stroke: #81c995;
+  --messagebus-fill: #193a6a;
+  --messagebus-stroke: #8ab4f8;
+  --external-fill: #17243a;
+  --external-stroke: #9aa0a6;
+  --arrow: #8ab4f8;
+  --arrow-emphasis: #81c995;
+  --toolbar-bg: #17243a;
+  --toolbar-border: #3b526f;
+  --toolbar-text: #f1f3f4;
+  --toolbar-hover: #233b60;
+  --toolbar-menu-bg: #17243a;
+  --gcp-region-fill: rgba(66, 133, 244, 0.09);
+  --gcp-region-stroke: #8ab4f8;
+  --gcp-outer-fill: rgba(16, 24, 39, 0.3);
+  --gcp-outer-stroke: #9aa0a6;
+}
+
+svg[data-preset] .c-region {
+  fill: var(--gcp-region-fill);
+  stroke: var(--gcp-region-stroke);
+  stroke-dasharray: none;
+}
+svg[data-preset] .c-region[data-composition-frame-label="Google Cloud target"],
+svg[data-preset] .c-region[data-composition-frame-label="Local workstation"] {
+  fill: var(--gcp-outer-fill);
+  stroke: var(--gcp-outer-stroke);
+}
+svg[data-preset] .c-security-group {
+  fill: var(--gcp-region-fill);
+  stroke: var(--gcp-region-stroke);
+  stroke-dasharray: none;
+}

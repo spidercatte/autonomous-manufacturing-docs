@@ -1,0 +1,448 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Target Google Cloud Architecture",
+    "output": "gcp-deployment.html",
+    "visual_preset": "blueprint",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1350,
+      950
+    ],
+    "views": [
+      {
+        "id": "telemetry",
+        "label": "Telemetry",
+        "focus": [
+          "source",
+          "pubsub",
+          "dataflow",
+          "bigquery"
+        ],
+        "note": "Streaming telemetry is cleaned and stored for analysis."
+      },
+      {
+        "id": "manuals",
+        "label": "Manual evidence",
+        "focus": [
+          "documents",
+          "eventarc",
+          "parser",
+          "embedding",
+          "staging",
+          "vector"
+        ],
+        "note": "Manuals are parsed, chunked, embedded, staged and explicitly indexed."
+      },
+      {
+        "id": "operator",
+        "label": "Operator and workflow",
+        "focus": [
+          "operator",
+          "edge",
+          "iap",
+          "app",
+          "workflow",
+          "agents",
+          "cloudsql",
+          "twins"
+        ],
+        "note": "The workflow owns human approval and simulated outcomes; agents provide advice."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "source",
+      "type": "external",
+      "label": "Plant + mock feeds",
+      "sublabel": "read-only telemetry / alarms",
+      "pos": [
+        40,
+        100
+      ],
+      "size": [
+        170,
+        76
+      ]
+    },
+    {
+      "id": "pubsub",
+      "type": "messagebus",
+      "label": "Pub/Sub",
+      "sublabel": "telemetry + alarm topics",
+      "pos": [
+        260,
+        100
+      ],
+      "size": [
+        170,
+        76
+      ]
+    },
+    {
+      "id": "dataflow",
+      "type": "cloud",
+      "label": "Dataflow",
+      "sublabel": "Streaming Engine + autoscaling",
+      "pos": [
+        480,
+        100
+      ],
+      "size": [
+        170,
+        76
+      ]
+    },
+    {
+      "id": "bigquery",
+      "type": "database",
+      "label": "BigQuery",
+      "sublabel": "partitioned history",
+      "pos": [
+        700,
+        100
+      ],
+      "size": [
+        170,
+        76
+      ]
+    },
+    {
+      "id": "documents",
+      "type": "database",
+      "label": "Cloud Storage",
+      "sublabel": "manuals + raw archives",
+      "pos": [
+        920,
+        100
+      ],
+      "size": [
+        170,
+        76
+      ]
+    },
+    {
+      "id": "eventarc",
+      "type": "messagebus",
+      "label": "Eventarc",
+      "sublabel": "manual finalize event",
+      "pos": [
+        1140,
+        100
+      ],
+      "size": [
+        170,
+        76
+      ]
+    },
+    {
+      "id": "operator",
+      "type": "external",
+      "label": "Operator browser",
+      "sublabel": "dashboard + approvals",
+      "pos": [
+        40,
+        375
+      ],
+      "size": [
+        170,
+        76
+      ]
+    },
+    {
+      "id": "edge",
+      "type": "security",
+      "label": "Optional LB + Armor",
+      "sublabel": "optional WAF + rate limits",
+      "pos": [
+        260,
+        375
+      ],
+      "size": [
+        170,
+        76
+      ]
+    },
+    {
+      "id": "iap",
+      "type": "security",
+      "label": "IAP",
+      "sublabel": "direct on Cloud Run",
+      "pos": [
+        480,
+        375
+      ],
+      "size": [
+        170,
+        76
+      ]
+    },
+    {
+      "id": "app",
+      "type": "frontend",
+      "label": "Cloud Run app",
+      "sublabel": "dashboard + API + SSE",
+      "pos": [
+        700,
+        375
+      ],
+      "size": [
+        170,
+        76
+      ]
+    },
+    {
+      "id": "workflow",
+      "type": "security",
+      "label": "App workflow",
+      "sublabel": "case + approval gates",
+      "pos": [
+        920,
+        375
+      ],
+      "size": [
+        170,
+        76
+      ]
+    },
+    {
+      "id": "parser",
+      "type": "backend",
+      "label": "Cloud Run parser",
+      "sublabel": "extract + chunk manuals",
+      "pos": [
+        1140,
+        375
+      ],
+      "size": [
+        170,
+        76
+      ]
+    },
+    {
+      "id": "gemini",
+      "type": "cloud",
+      "label": "Vertex AI Gemini",
+      "sublabel": "read-only Twin Assistant",
+      "pos": [
+        40,
+        650
+      ],
+      "size": [
+        170,
+        76
+      ]
+    },
+    {
+      "id": "twins",
+      "type": "backend",
+      "label": "Digital twins",
+      "sublabel": "advisory + simulated only",
+      "pos": [
+        480,
+        650
+      ],
+      "size": [
+        170,
+        76
+      ]
+    },
+    {
+      "id": "cloudsql",
+      "type": "database",
+      "label": "Cloud SQL",
+      "sublabel": "cases + audit + learning",
+      "pos": [
+        260,
+        650
+      ],
+      "size": [
+        170,
+        76
+      ]
+    },
+    {
+      "id": "agents",
+      "type": "backend",
+      "label": "Deterministic agents",
+      "sublabel": "diagnosis + heat paths",
+      "pos": [
+        700,
+        650
+      ],
+      "size": [
+        170,
+        76
+      ]
+    },
+    {
+      "id": "embedding",
+      "type": "cloud",
+      "label": "Text Embeddings API",
+      "sublabel": "supported model; chunk vectors",
+      "pos": [
+        1140,
+        650
+      ],
+      "size": [
+        170,
+        76
+      ]
+    },
+    {
+      "id": "staging",
+      "type": "database",
+      "label": "Cloud Storage staging",
+      "sublabel": "vectors + batch update",
+      "pos": [
+        1140,
+        775
+      ],
+      "size": [
+        170,
+        76
+      ]
+    },
+    {
+      "id": "vector",
+      "type": "cloud",
+      "label": "Vertex AI Vector Search",
+      "sublabel": "manual evidence index",
+      "pos": [
+        920,
+        775
+      ],
+      "size": [
+        170,
+        76
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Google Cloud target",
+      "wraps": [
+        "pubsub",
+        "dataflow",
+        "bigquery",
+        "documents",
+        "eventarc",
+        "edge",
+        "iap",
+        "app",
+        "workflow",
+        "parser",
+        "gemini",
+        "twins",
+        "cloudsql",
+        "agents",
+        "embedding",
+        "staging",
+        "vector"
+      ],
+      "pad": 24
+    }
+  ],
+  "connections": [
+    {
+      "from": "source",
+      "to": "pubsub"
+    },
+    {
+      "from": "pubsub",
+      "to": "dataflow"
+    },
+    {
+      "from": "dataflow",
+      "to": "bigquery"
+    },
+    {
+      "from": "documents",
+      "to": "eventarc"
+    },
+    {
+      "from": "eventarc",
+      "to": "parser"
+    },
+    {
+      "from": "parser",
+      "to": "embedding"
+    },
+    {
+      "from": "embedding",
+      "to": "staging"
+    },
+    {
+      "from": "staging",
+      "to": "vector"
+    },
+    {
+      "from": "operator",
+      "to": "edge",
+      "label": "HTTPS"
+    },
+    {
+      "from": "edge",
+      "to": "iap"
+    },
+    {
+      "from": "iap",
+      "to": "app",
+      "variant": "security"
+    },
+    {
+      "from": "app",
+      "to": "workflow"
+    },
+    {
+      "from": "workflow",
+      "to": "agents"
+    },
+    {
+      "from": "workflow",
+      "to": "cloudsql",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "agents",
+      "to": "twins"
+    },
+    {
+      "from": "agents",
+      "to": "vector"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Telemetry and manual evidence",
+      "items": [
+        "Pub/Sub feeds telemetry to BigQuery. Add Dataflow Streaming Engine when event transforms and measured volume justify a continuously running job.",
+        "Eventarc triggers a Cloud Run parser on manual upload. It extracts and chunks text, calls a supported embedding model, stages vectors in a separate Cloud Storage prefix, then explicitly updates the batch Vector Search index.",
+        "Keep document, revision, section and approval metadata with every chunk; remove superseded or deleted passages before they can be retrieved."
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Application authority and state",
+      "items": [
+        "One Cloud Run app hosts the deterministic diagnosis and heat paths. Its application workflow owns cases, named approval and versioned pre-execution checks.",
+        "Cloud SQL stores cases, audit, outcomes and learning state; BigQuery serves historical analytics. Consider AlloyDB only after a measured database need.",
+        "A supported Gemini model serves only the optional read-only Twin Assistant. Retrieved manuals remain untrusted evidence, never instructions or authority."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Ingress and simulation boundary",
+      "items": [
+        "Enable IAP directly on Cloud Run. If public exposure needs WAF or rate limits, add an external Application Load Balancer with Cloud Armor and restrict Cloud Run ingress to internal and load balancing traffic.",
+        "The workflow rechecks named human approval and passing validation before simulated action. Diagnosis records a simulated work window and person-confirmed outcome; there is no PLC or OT write path.",
+        "Keep digital twins on Cloud Run initially. Evaluate GKE only if measured simulation needs exceed that host."
+      ]
+    }
+  ]
+}

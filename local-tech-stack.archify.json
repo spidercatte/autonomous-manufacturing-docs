@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Local Proactive Tech Stack",
+    "output": "local-tech-stack.html",
+    "visual_preset": "blueprint",
+    "quality_profile": "showcase",
+    "viewBox": [1350, 820],
+    "views": [
+      { "id": "local-data", "label": "Local data", "focus": ["fixtures", "build_tools", "duckdb", "manuals", "rag_index", "learned"], "note": "Synthetic files feed the app and optional maintenance analytics; manuals are indexed locally." },
+      { "id": "operator-path", "label": "Operator and workflow", "focus": ["browser", "server", "workflow", "diagnosis_agents", "ontology", "retriever"], "note": "The browser calls a loopback HTTP API; the workflow owns approval and scheduling gates." },
+      { "id": "simulation", "label": "Agents and simulation", "focus": ["assistant", "plant", "heat_agents", "twin", "gemini", "workflow"], "note": "The heat path simulates execution; the diagnosis path records a simulated work window and person-confirmed outcome." }
+    ]
+  },
+  "components": [
+    { "id": "fixtures", "type": "external", "label": "Synthetic data files", "sublabel": "CSV + JSON under data/", "pos": [40, 105], "size": [170, 76] },
+    { "id": "build_tools", "type": "backend", "label": "Fixture + build tools", "sublabel": "run.sh / tools", "pos": [260, 105], "size": [170, 76] },
+    { "id": "duckdb", "type": "database", "label": "DuckDB analytics", "sublabel": "state/analytics.duckdb", "pos": [480, 105], "size": [170, 76] },
+    { "id": "manuals", "type": "database", "label": "Manuals + SOPs", "sublabel": "local maintenance files", "pos": [700, 105], "size": [170, 76] },
+    { "id": "rag_index", "type": "database", "label": "FAISS index", "sublabel": "state/rag; optional", "pos": [920, 105], "size": [170, 76] },
+    { "id": "learned", "type": "database", "label": "Learning file", "sublabel": "state/learned.json", "pos": [1140, 105], "size": [170, 76] },
+    { "id": "browser", "type": "external", "label": "Operator browser", "sublabel": "vanilla JS dashboard", "pos": [40, 380], "size": [170, 76] },
+    { "id": "server", "type": "frontend", "label": "Python HTTP server", "sublabel": "stdlib API + SSE", "pos": [260, 380], "size": [170, 76] },
+    { "id": "workflow", "type": "security", "label": "Workflow", "sublabel": "cases + human gates", "pos": [480, 380], "size": [170, 76] },
+    { "id": "diagnosis_agents", "type": "backend", "label": "Diagnosis agents", "sublabel": "seven fixed stages", "pos": [700, 380], "size": [170, 76] },
+    { "id": "ontology", "type": "backend", "label": "Ontology facade", "sublabel": "read-only context", "pos": [920, 380], "size": [170, 76] },
+    { "id": "retriever", "type": "cloud", "label": "Local retrieval", "sublabel": "FAISS / keyword fallback", "pos": [1140, 380], "size": [170, 76] },
+    { "id": "assistant", "type": "backend", "label": "Twin Assistant", "sublabel": "rules default; read-only", "pos": [260, 650], "size": [170, 76] },
+    { "id": "plant", "type": "backend", "label": "Mock plant", "sublabel": "simulated pipe cell", "pos": [480, 650], "size": [170, 76] },
+    { "id": "heat_agents", "type": "backend", "label": "Heat-case agents", "sublabel": "forecast to learning", "pos": [700, 650], "size": [170, 76] },
+    { "id": "twin", "type": "backend", "label": "Digital twins", "sublabel": "pipe + intervention", "pos": [920, 650], "size": [170, 76] },
+    { "id": "gemini", "type": "cloud", "label": "Gemini API", "sublabel": "optional via ADK", "pos": [40, 650], "size": [170, 76] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Files and offline preparation", "wraps": ["fixtures", "build_tools", "duckdb", "manuals", "rag_index", "learned"], "pad": 18 },
+    { "kind": "security-group", "label": "Local application and diagnosis", "wraps": ["browser", "server", "workflow", "diagnosis_agents", "ontology", "retriever"], "pad": 18 },
+    { "kind": "region", "label": "Local simulation and assistant", "wraps": ["assistant", "plant", "heat_agents", "twin"], "pad": 18 }
+  ],
+  "connections": [
+    { "from": "fixtures", "to": "build_tools" },
+    { "from": "build_tools", "to": "duckdb" },
+    { "from": "manuals", "to": "rag_index", "label": "index" },
+    { "from": "browser", "to": "server", "label": "HTTP + SSE", "labelAt": [235, 470] },
+    { "from": "server", "to": "workflow" },
+    { "from": "workflow", "to": "diagnosis_agents" },
+    { "from": "diagnosis_agents", "to": "ontology", "label": "context" },
+    { "from": "ontology", "to": "retriever", "label": "evidence" },
+    { "from": "duckdb", "to": "workflow", "label": "diagnostic cases", "labelAt": [535, 260] },
+    { "from": "server", "to": "assistant", "label": "read-only chat", "labelAt": [346, 558] },
+    { "from": "workflow", "to": "heat_agents", "label": "heat case", "labelAt": [613, 558] },
+    { "from": "plant", "to": "heat_agents", "label": "mock readings", "labelAt": [675, 740] },
+    { "from": "heat_agents", "to": "twin", "label": "what-if", "labelAt": [895, 740] },
+    { "from": "assistant", "to": "gemini", "variant": "dashed" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Local runtime", "items": ["Python 3.12+ standard-library server hosts the dashboard, JSON API, and read-only SSE stream on loopback.", "Workflow owns cases, review, scheduling, and validation. The browser holds no approval authority.", "Core heat demo runs without cloud services or third-party Python packages."] },
+    { "dot": "violet", "title": "Data and agent stack", "items": ["Heat path: Environmental → Analysis → Planner → Simulation → Risk → Validation → Execution → Monitoring → Learning.", "Diagnosis path: Signal → Asset context → Knowledge → Diagnostic reasoning → Twin → Work instruction → Brief validation.", "Maintenance uses optional DuckDB analytics and FAISS with cached ONNX embeddings; a labeled keyword retriever is the fallback. The ontology projects read-only context."] },
+    { "dot": "emerald", "title": "Simulation and safety", "items": ["The heat case changes only the mock plant after named human approval and fresh validation; the digital twin remains separate.", "The diagnostic case records a simulated work window and person-confirmed outcome in DuckDB; it never actuates a machine.", "The rules Twin Assistant is default. Optional ADK/Gemini chat is read-only; there is no PLC or OT network path."] }
+  ]
+}

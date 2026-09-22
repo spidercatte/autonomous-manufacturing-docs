@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "Evidence, Ontology, and Action Governance",
+    "output": "ontology-governance.html",
+    "viewBox": [1080, 820],
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "evidence-lineage",
+        "label": "Evidence lineage",
+        "focus": ["telemetry", "operations", "documents", "duckdb", "faiss", "ontology"],
+        "note": "Trace structured operations and approved document passages into typed objects, links, and provenance."
+      },
+      {
+        "id": "agent-context",
+        "label": "Agent context",
+        "focus": ["duckdb", "faiss", "ontology", "agents"],
+        "note": "Agents receive bounded semantic context without direct mutation access to authoritative stores."
+      },
+      {
+        "id": "governed-action",
+        "label": "Governed action",
+        "focus": ["agents", "twin", "workflow", "outcomes"],
+        "note": "The twin predicts; validators and Workflow enforce gates; a named operator acknowledges the outcome."
+      }
+    ]
+  },
+  "stages": [
+    { "label": "Source silos" },
+    { "label": "Authoritative stores" },
+    { "label": "Semantic context" },
+    { "label": "Reason + simulate" },
+    { "label": "Govern + learn" }
+  ],
+  "nodes": [
+    { "id": "telemetry", "type": "external", "label": "OT Signals + Alarms", "sublabel": "read-only simulated inputs", "stage": 0, "row": 0, "tag": "NO PLC WRITE", "width": 150 },
+    { "id": "operations", "type": "external", "label": "Operations Records", "sublabel": "assets, history, parts/tools", "stage": 0, "row": 2, "width": 150 },
+    { "id": "documents", "type": "external", "label": "Engineering Docs", "sublabel": "manuals, SOPs, suppliers", "stage": 0, "row": 4, "width": 150 },
+    { "id": "duckdb", "type": "database", "label": "DuckDB", "sublabel": "records + case state", "stage": 1, "row": 1, "tag": "SOURCE OF TRUTH", "width": 150 },
+    { "id": "faiss", "type": "database", "label": "FAISS", "sublabel": "approved passage index", "stage": 1, "row": 4, "tag": "RETRIEVAL" },
+    { "id": "ontology", "type": "backend", "label": "Ontology Layer", "sublabel": "objects, links, provenance", "stage": 2, "row": 2, "tag": "READ ONLY", "width": 150 },
+    { "id": "agents", "type": "backend", "label": "Five-Agent Mesh", "sublabel": "signal to work instruction", "stage": 3, "row": 0, "tag": "BOUNDED CONTEXT", "width": 150 },
+    { "id": "twin", "type": "backend", "label": "Digital Twin", "sublabel": "predicted states", "stage": 3, "row": 3, "tag": "ADVISORY", "width": 150 },
+    { "id": "workflow", "type": "security", "label": "Human-Gated Workflow", "sublabel": "validators + named approval", "stage": 4, "row": 0, "tag": "SOLE AUTHORITY", "width": 150 },
+    { "id": "outcomes", "type": "database", "label": "Case + Outcome History", "sublabel": "audit, evaluation, learning", "stage": 4, "row": 4, "tag": "PERSISTED", "width": 150 }
+  ],
+  "flows": [
+    { "id": "telemetry_store", "from": "telemetry", "to": "duckdb", "label": "signal windows + alarm payloads", "classification": "structured", "variant": "emphasis" },
+    { "id": "operations_store", "from": "operations", "to": "duckdb", "label": "asset + maintenance facts", "classification": "structured", "variant": "default" },
+    { "id": "documents_index", "from": "documents", "to": "faiss", "label": "approved sections", "classification": "untrusted text", "variant": "default", "labelDy": 53 },
+    { "id": "structured_projection", "from": "duckdb", "to": "ontology", "label": "typed records + source IDs", "classification": "read only", "variant": "default" },
+    { "id": "evidence_projection", "from": "faiss", "to": "ontology", "label": "passages + index lineage", "classification": "cited evidence", "variant": "default" },
+    { "id": "bounded_context", "from": "ontology", "to": "agents", "label": "objects + links + provenance", "classification": "bounded context", "variant": "emphasis" },
+    { "id": "candidate_tests", "from": "agents", "to": "twin", "label": "intervention options", "classification": "hypothetical", "variant": "dashed", "route": "straight", "fromSide": "bottom", "toSide": "top", "labelAt": [745, 385] },
+    { "id": "agent_brief", "from": "agents", "to": "workflow", "label": "cited diagnosis + work brief", "classification": "proposal", "variant": "default", "route": "straight", "labelAt": [853, 100] },
+    { "id": "twin_results", "from": "twin", "to": "workflow", "label": "predictions + acceptance criteria", "classification": "advisory", "variant": "dashed" },
+    { "id": "governed_outcome", "from": "workflow", "to": "outcomes", "label": "acknowledged outcome + case audit", "classification": "persisted", "variant": "security", "route": "straight", "fromSide": "bottom", "toSide": "top", "labelAt": [960, 385] }
+  ],
+  "cards": [
+    {
+      "dot": "violet",
+      "title": "Ontology responsibility",
+      "items": [
+        "Unifies identity and relationships across DuckDB records and retrieved evidence",
+        "Carries provenance, applicability, citations, and explainable blockers",
+        "Projects source data without replacing or mutating the authoritative stores"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Governance boundary",
+      "items": [
+        "Ontology describes available actions; deterministic validators and Workflow enforce them",
+        "Agents and retrieved documents cannot approve, schedule, execute, or bypass a safety gate",
+        "The twin predicts hypothetical states and never writes to a PLC"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Learning boundary",
+      "items": [
+        "Confirmed outcomes update case and evaluation history",
+        "Observed telemetry remains distinct from desired and predicted state",
+        "Approved manuals, catalogs, and FMEA records remain unchanged"
+      ]
+    }
+  ]
+}

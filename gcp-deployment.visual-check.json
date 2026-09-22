@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "ok": false,
+  "command": "visual-check",
+  "evidenceKind": "automated-browser",
+  "status": "fail",
+  "visualReview": "pending",
+  "artifact": {
+    "path": "/workspaces/autonomous-manufacturing/docs/gcp-deployment.html",
+    "sha256": "b4c65fdad6e834f2fb651c10f54726079d3a88546b0c2d53cd85d17655b720d9",
+    "bytes": 826391
+  },
+  "state": {
+    "detail": "read",
+    "motion": "still"
+  },
+  "chrome": {
+    "status": "available",
+    "executable": "/home/codespace/.cache/ms-playwright/chromium-1243/chrome-linux64/chrome"
+  },
+  "diagnostics": [
+    {
+      "code": "viewer/visual-check-runtime",
+      "severity": "error",
+      "message": "visual-check could not complete its Chrome inspection.",
+      "subject": {
+        "artifact": "/workspaces/autonomous-manufacturing/docs/gcp-deployment.html"
+      },
+      "evidence": {
+        "reason": "Chrome DevTools write pipe failed: write EPIPE [EPIPE]\nChrome process: still running."
+      },
+      "supportedFixes": [
+        "resolve the reported Chrome inspection error, then rerun visual-check"
+      ]
+    }
+  ],
+  "containment": {
+    "status": "fail",
+    "viewports": []
+  },
+  "readability": {
+    "status": "fail",
+    "minimumProjectedNodeTextPx": 6,
+    "viewports": []
+  },
+  "viewerChrome": {
+    "status": "fail",
+    "viewports": []
+  },
+  "captures": {
+    "status": "fail",
+    "screenshots": [],
+    "contactSheet": null
+  },
+  "sidecars": {
+    "receipt": "gcp-deployment.visual-check.json",
+    "contactSheet": "gcp-deployment.visual-check.html"
+  },
+  "error": "Chrome DevTools write pipe failed: write EPIPE [EPIPE]\nChrome process: still running."
+}
