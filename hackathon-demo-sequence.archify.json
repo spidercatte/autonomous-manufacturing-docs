@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Two-Use-Case Hackathon Demo",
+    "output": "hackathon-demo-sequence.html",
+    "viewBox": [1080, 1120],
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "column_fit": "spread",
+    "views": [
+      {
+        "id": "proactive-heat",
+        "label": "Use case 1: heat response",
+        "focus": ["operator", "dashboard", "workflow", "heat_agents", "pipe_twin"],
+        "note": "Turn a 41 C forecast into a named, validated and monitored feed-rate change on the simulated pipe-cell twin."
+      },
+      {
+        "id": "maintenance-diagnosis",
+        "label": "Use case 2: maintenance diagnosis",
+        "focus": ["operator", "dashboard", "workflow", "diagnostic_agents", "intervention_twin"],
+        "note": "Turn a coolant restriction alarm into a cited work brief and a person-recorded maintenance outcome."
+      },
+      {
+        "id": "shared-governance",
+        "label": "Shared human boundary",
+        "focus": ["operator", "dashboard", "workflow", "pipe_twin", "intervention_twin"],
+        "note": "Both paths are inspectable and versioned; the workflow owns approval and neither path writes to physical equipment."
+      }
+    ]
+  },
+  "participants": [
+    { "id": "operator", "type": "external", "label": "Named human" },
+    { "id": "dashboard", "type": "frontend", "label": "Dashboard + API", "sublabel": "review surface" },
+    { "id": "workflow", "type": "security", "label": "Workflow", "sublabel": "state + validation gates" },
+    { "id": "heat_agents", "type": "backend", "label": "Heat-case agents", "sublabel": "forecast to learning" },
+    { "id": "pipe_twin", "type": "backend", "label": "Pipe-cell twin", "sublabel": "simulated feed-rate state" },
+    { "id": "diagnostic_agents", "type": "backend", "label": "Diagnosis agents", "sublabel": "alarm to validated brief" },
+    { "id": "intervention_twin", "type": "backend", "label": "Intervention twin", "sublabel": "advisory predictions only" }
+  ],
+  "segments": [
+    { "from": 150, "to": 520, "label": "Use case 1 · proactive heat response" },
+    { "from": 540, "to": 860, "label": "Use case 2 · maintenance diagnosis" },
+    { "from": 880, "to": 1060, "label": "Shared governance boundary" }
+  ],
+  "messages": [
+    { "id": "heat_start", "from": "operator", "to": "dashboard", "y": 180, "label": "simulate incoming heat alert", "variant": "emphasis" },
+    { "id": "heat_raise", "from": "dashboard", "to": "workflow", "y": 220, "label": "raise 41 C forecast event", "variant": "emphasis" },
+    { "id": "heat_plan", "from": "workflow", "to": "heat_agents", "y": 260, "label": "analyse + recommend 8% reduction", "variant": "emphasis" },
+    { "id": "heat_dry_run", "from": "heat_agents", "to": "pipe_twin", "y": 300, "label": "dry-run 420 -> 386.4 mm/min", "variant": "default" },
+    { "id": "heat_ready", "from": "pipe_twin", "to": "workflow", "y": 340, "label": "prediction + rollback plan", "variant": "return" },
+    { "id": "heat_review", "from": "workflow", "to": "dashboard", "y": 380, "label": "evidence + simulation awaiting review", "variant": "return" },
+    { "id": "heat_approve", "from": "operator", "to": "workflow", "y": 420, "label": "named approval for task version", "variant": "security" },
+    { "id": "heat_execute", "from": "workflow", "to": "pipe_twin", "y": 440, "label": "fresh validation; simulated execution", "variant": "security" },
+    { "id": "heat_monitor", "from": "pipe_twin", "to": "workflow", "y": 500, "label": "monitor, rollback if needed, learn", "variant": "return" },
+    { "id": "diag_select", "from": "operator", "to": "dashboard", "y": 550, "label": "select coolant restriction alarm", "variant": "emphasis" },
+    { "id": "diag_raise", "from": "dashboard", "to": "workflow", "y": 590, "label": "raise machine alarm", "variant": "emphasis" },
+    { "id": "diag_run", "from": "workflow", "to": "diagnostic_agents", "y": 630, "label": "run fixed diagnostic stages", "variant": "emphasis" },
+    { "id": "diag_compare", "from": "diagnostic_agents", "to": "intervention_twin", "y": 670, "label": "compare repair options", "variant": "default" },
+    { "id": "diag_predict", "from": "intervention_twin", "to": "diagnostic_agents", "y": 710, "label": "advisory predictions + caveats", "variant": "return" },
+    { "id": "diag_brief", "from": "diagnostic_agents", "to": "workflow", "y": 750, "label": "ranked causes + validated work brief", "variant": "return" },
+    { "id": "diag_approve", "from": "operator", "to": "workflow", "y": 790, "label": "acknowledge critical steps + approve", "variant": "security" },
+    { "id": "diag_window", "from": "workflow", "to": "dashboard", "y": 830, "label": "fresh validation; simulated work window", "variant": "return" },
+    { "id": "diag_outcome", "from": "operator", "to": "workflow", "y": 870, "label": "record person-performed outcome", "variant": "security" },
+    { "id": "shared_audit", "from": "workflow", "to": "dashboard", "y": 930, "label": "versioned audit + final case state", "variant": "return" },
+    { "id": "shared_boundary", "from": "workflow", "to": "operator", "y": 990, "label": "no PLC or physical-device write", "variant": "dashed" }
+  ],
+  "activations": [
+    { "participant": "dashboard", "from": 174, "to": 394, "type": "frontend" },
+    { "participant": "workflow", "from": 214, "to": 1004, "type": "security" },
+    { "participant": "heat_agents", "from": 254, "to": 344, "type": "backend" },
+    { "participant": "pipe_twin", "from": 294, "to": 494, "type": "backend" },
+    { "participant": "diagnostic_agents", "from": 624, "to": 764, "type": "backend" },
+    { "participant": "intervention_twin", "from": 664, "to": 724, "type": "backend" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Use case 1 · proactive control",
+      "items": [
+        "A 41 C forecast becomes an 8% feed-rate recommendation.",
+        "Dry run and rollback plan are visible before approval.",
+        "Fresh validation gates simulated execution on the separate pipe-cell twin."
+      ]
+    },
+    {
+      "dot": "orange",
+      "title": "Use case 2 · maintenance diagnosis",
+      "items": [
+        "A coolant restriction alarm becomes ranked causes and a cited work brief.",
+        "The intervention twin is advisory; a person performs the work.",
+        "A named reviewer records the outcome after the simulated maintenance window."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Shared governance",
+      "items": [
+        "Workflow owns versions, approvals, validation, and audit state.",
+        "The Twin Assistant and diagnostic predictions cannot approve or execute.",
+        "The prototype has no PLC, device, or physical-equipment write path."
+      ]
+    }
+  ]
+}

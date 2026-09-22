@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Digital Twin and Operational Ontology",
+    "output": "digital-twin.html",
+    "quality_profile": "showcase",
+    "viewBox": [1240, 800],
+    "views": [
+      {"id": "semantic-context", "label": "Semantic context", "focus": ["fixtures", "analytics", "retrieval", "ontology", "diagnosis"], "note": "The ontology projects validated, read-only context from records and retrieved evidence."},
+      {"id": "maintenance-twin", "label": "Maintenance twin", "focus": ["ontology", "diagnosis", "intervention", "validator", "workflow"], "note": "Diagnosis compares advisory interventions; deterministic validation checks the brief."},
+      {"id": "heat-twin", "label": "Heat-case twin", "focus": ["operator", "workflow", "heat_agents", "pipe_twin"], "note": "The heat case uses a separate pipe-cell twin and named human approval for simulated execution."}
+    ]
+  },
+  "components": [
+    {"id": "fixtures", "type": "external", "label": "Synthetic inputs", "sublabel": "plant, weather, maintenance", "pos": [40, 110], "size": [180, 76]},
+    {"id": "analytics", "type": "database", "label": "Analytics repository", "sublabel": "DuckDB structured records", "pos": [340, 110], "size": [180, 76]},
+    {"id": "ontology", "type": "backend", "label": "Operational ontology", "sublabel": "typed objects + provenance", "pos": [640, 110], "size": [180, 76]},
+    {"id": "retrieval", "type": "database", "label": "Controlled evidence", "sublabel": "manuals + FAISS retrieval", "pos": [940, 110], "size": [180, 76]},
+    {"id": "operator", "type": "external", "label": "Operator dashboard", "sublabel": "case review + approval", "pos": [40, 365], "size": [180, 76]},
+    {"id": "workflow", "type": "security", "label": "Workflow", "sublabel": "case state + human gates", "pos": [340, 365], "size": [180, 76]},
+    {"id": "diagnosis", "type": "backend", "label": "Diagnostic agents", "sublabel": "bounded ontology context", "pos": [640, 365], "size": [180, 76]},
+    {"id": "intervention", "type": "backend", "label": "Intervention twin", "sublabel": "advisory what-if results", "pos": [940, 365], "size": [180, 76]},
+    {"id": "heat_agents", "type": "backend", "label": "Heat-case agents", "sublabel": "forecast to monitoring", "pos": [340, 620], "size": [180, 76]},
+    {"id": "pipe_twin", "type": "backend", "label": "Pipe-cell twin", "sublabel": "state + feed-rate model", "pos": [640, 620], "size": [180, 76]},
+    {"id": "validator", "type": "security", "label": "Brief validator", "sublabel": "deterministic safety checks", "pos": [940, 620], "size": [180, 76]}
+  ],
+  "boundaries": [
+    {"kind": "region", "label": "Read-only data and context", "wraps": ["fixtures", "analytics", "ontology", "retrieval"], "pad": 18},
+    {"kind": "region", "label": "Case paths and digital twins", "wraps": ["operator", "workflow", "diagnosis", "intervention", "heat_agents", "pipe_twin", "validator"], "pad": 18}
+  ],
+  "connections": [
+    {"from": "fixtures", "to": "analytics", "label": "load records"},
+    {"from": "analytics", "to": "ontology", "label": "project facts"},
+    {"from": "retrieval", "to": "ontology", "label": "verified passages"},
+    {"from": "ontology", "to": "diagnosis", "label": "typed context", "labelDy": 24},
+    {"from": "operator", "to": "workflow", "label": "review + approve", "variant": "security"},
+    {"from": "workflow", "to": "diagnosis", "label": "run diagnosis"},
+    {"from": "diagnosis", "to": "intervention", "label": "test candidates"},
+    {"from": "intervention", "to": "validator", "label": "predicted signals", "labelDy": 24},
+    {"from": "workflow", "to": "heat_agents", "label": "run heat case", "labelDy": 24},
+    {"from": "heat_agents", "to": "pipe_twin", "label": "simulate feed rate"}
+  ],
+  "cards": [
+    {"dot": "violet", "title": "Ontology is a read-only projection", "items": ["Typed assets, signals, alarms, resources, documents, cases and evidence keep source provenance.", "DuckDB and retrieval own their records; the ontology validates links and builds bounded agent context."]},
+    {"dot": "emerald", "title": "Two distinct twin paths", "items": ["The pipe-cell twin models the heat case and its simulated feed-rate change.", "The intervention twin predicts maintenance outcomes for candidate work steps; its results are advisory."]},
+    {"dot": "rose", "title": "Authority stays with the workflow", "items": ["The validator checks the work brief; a named operator reviews and approves through workflow guards.", "A diagnostic case records a simulated work window and person-confirmed outcome. No PLC or device write path exists."]}
+  ]
+}

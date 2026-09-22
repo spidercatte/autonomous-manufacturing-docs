@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Coolant-Restriction Demo Sequence",
+    "output": "demo-sequence.html",
+    "viewBox": [1200, 980],
+    "column_fit": "spread",
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "detect-diagnose",
+        "label": "Detect and diagnose",
+        "focus": ["operator", "dashboard", "workflow", "signal", "asset_context", "knowledge", "diagnosis", "work_instruction", "evidence"],
+        "note": "Select the controlled input variant, detect the degradation, and build a cited diagnosis without reading hidden labels."
+      },
+      {
+        "id": "compare-decide",
+        "label": "Compare and decide",
+        "focus": ["signal", "asset_context", "knowledge", "diagnosis", "twin", "work_instruction", "workflow", "dashboard", "operator"],
+        "note": "Compare temporary feed mitigation with the coolant intervention, then review validated work and acknowledge critical steps."
+      },
+      {
+        "id": "execute-learn",
+        "label": "Execute and learn",
+        "focus": ["operator", "dashboard", "workflow", "twin", "evidence"],
+        "note": "Execute only on the twin, monitor the result, and persist the confirmed outcome separately from approved source documents."
+      }
+    ]
+  },
+  "participants": [
+    { "id": "operator", "type": "external", "label": "Operator" },
+    { "id": "dashboard", "type": "frontend", "label": "Dashboard" },
+    { "id": "workflow", "type": "security", "label": "Workflow" },
+    { "id": "signal", "type": "backend", "label": "Signal Agent" },
+    { "id": "asset_context", "type": "backend", "label": "Asset Context" },
+    { "id": "knowledge", "type": "backend", "label": "Knowledge" },
+    { "id": "diagnosis", "type": "backend", "label": "Diagnosis" },
+    { "id": "work_instruction", "type": "backend", "label": "Work Brief" },
+    { "id": "evidence", "type": "database", "label": "Evidence" },
+    { "id": "twin", "type": "backend", "label": "Advisory Twin" }
+  ],
+  "segments": [
+    { "from": 150, "to": 570, "label": "Trigger + five-agent diagnosis" },
+    { "from": 580, "to": 700, "label": "Compare + review" },
+    { "from": 710, "to": 900, "label": "Approve + execute + learn" }
+  ],
+  "messages": [
+    { "id": "select_variant", "from": "operator", "to": "dashboard", "y": 160, "label": "select coolant-restriction input", "variant": "default" },
+    { "id": "start_case", "from": "dashboard", "to": "workflow", "y": 195, "label": "simulate heat alert + alarm", "variant": "emphasis" },
+    { "id": "run_agents", "from": "workflow", "to": "signal", "y": 230, "label": "run fixed five-agent pipeline", "variant": "emphasis" },
+    { "id": "signal_to_context", "from": "signal", "to": "asset_context", "y": 265, "label": "signal assessment", "variant": "return" },
+    { "id": "context_to_knowledge", "from": "asset_context", "to": "knowledge", "y": 300, "label": "asset facts + history", "variant": "return" },
+    { "id": "knowledge_context", "from": "knowledge", "to": "evidence", "y": 335, "label": "query bounded records + passages", "variant": "default" },
+    { "id": "evidence_to_diagnosis", "from": "knowledge", "to": "diagnosis", "y": 405, "label": "retrieved evidence + provenance", "variant": "return" },
+    { "id": "test_options", "from": "diagnosis", "to": "twin", "y": 440, "label": "compare feed mitigation vs filter intervention", "variant": "emphasis" },
+    { "id": "simulation_results", "from": "twin", "to": "work_instruction", "y": 475, "label": "predictions + acceptance criteria", "variant": "return" },
+    { "id": "brief_validation", "from": "work_instruction", "to": "workflow", "y": 510, "label": "brief + validator verdict", "variant": "return" },
+    { "id": "show_case", "from": "workflow", "to": "dashboard", "y": 600, "label": "evidence, blockers, schedule, audit", "variant": "return" },
+    { "id": "approve", "from": "operator", "to": "dashboard", "y": 640, "label": "acknowledge critical steps + approve", "variant": "security" },
+    { "id": "guarded_command", "from": "dashboard", "to": "workflow", "y": 675, "label": "named action + current task version", "variant": "security" },
+    { "id": "execute_twin", "from": "workflow", "to": "twin", "y": 730, "label": "commit simulated scenario; no PLC write", "variant": "security" },
+    { "id": "monitor_result", "from": "twin", "to": "workflow", "y": 770, "label": "simulated verification readings", "variant": "return" },
+    { "id": "confirm_outcome", "from": "operator", "to": "workflow", "y": 815, "label": "confirm cause and repair outcome", "variant": "security" },
+    { "id": "persist_outcome", "from": "workflow", "to": "evidence", "y": 860, "label": "persist outcome; manuals unchanged", "variant": "dashed" }
+  ],
+  "activations": [
+    { "participant": "dashboard", "from": 155, "to": 585, "type": "frontend" },
+    { "participant": "workflow", "from": 190, "to": 725, "type": "security" },
+    { "participant": "signal", "from": 225, "to": 275, "type": "backend" },
+    { "participant": "asset_context", "from": 260, "to": 310, "type": "backend" },
+    { "participant": "knowledge", "from": 295, "to": 420, "type": "backend" },
+    { "participant": "diagnosis", "from": 400, "to": 455, "type": "backend" },
+    { "participant": "twin", "from": 435, "to": 752, "type": "backend" },
+    { "participant": "work_instruction", "from": 465, "to": 525, "type": "backend" },
+    { "participant": "evidence", "from": 330, "to": 865, "type": "database" }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "What the audience sees",
+      "items": [
+        "Cpk degrades before the conventional alarm",
+        "Cited evidence and top-three hypotheses include contradictions",
+        "Twin predictions distinguish temporary mitigation from repair",
+        "Agents run Signal, Asset Context, Knowledge, Root Cause, then Work Instruction"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "What stays authoritative",
+      "items": [
+        "DuckDB owns structured state; FAISS owns passage retrieval",
+        "Workflow owns every state change and rechecks stale approvals",
+        "Source manuals, FMEA, and catalogs are never changed by learning"
+      ]
+    }
+  ]
+}
